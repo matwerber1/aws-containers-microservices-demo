@@ -1,0 +1,112 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: microservices-demo
+  namespace: default
+  selfLink: "/apis/extensions/v1beta1/namespaces/default/deployments/microservices-demo"
+  uid: 96590b5b-a0c7-11e9-ad6f-127e03a2d9dc
+  resourceVersion: '1711'
+  generation: 1
+  creationTimestamp: '2019-07-07T14:57:49Z'
+  labels:
+    k8s-app: microservices-demo
+  annotations:
+    deployment.kubernetes.io/revision: '1'
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: microservices-demo
+  template:
+    metadata:
+      name: microservices-demo
+      creationTimestamp: 
+      labels:
+        k8s-app: microservices-demo
+    spec:
+      containers:
+      - name: microservices-demo
+        image: 544941453660.dkr.ecr.us-east-1.amazonaws.com/microservices-demo
+        env:
+        - name: SERVICE_NAME
+          value: EKS
+        - name: PORT
+          value: '80'
+        - name: MY_NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: MY_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: MY_POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: MY_POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: MY_POD_SERVICE_ACCOUNT
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.serviceAccountName
+        - name: MY_CPU_REQUEST
+          valueFrom:
+            resourceFieldRef:
+              containerName: test-container
+              resource: requests.cpu
+        - name: MY_CPU_LIMIT
+          valueFrom:
+            resourceFieldRef:
+              containerName: test-container
+              resource: limits.cpu
+        - name: MY_MEM_REQUEST
+          valueFrom:
+            resourceFieldRef:
+              containerName: test-container
+              resource: requests.memory
+        - name: MY_MEM_LIMIT
+          valueFrom:
+            resourceFieldRef:
+              containerName: test-container
+              resource: limits.memory
+        resources: {}
+        terminationMessagePath: "/dev/termination-log"
+        terminationMessagePolicy: File
+        imagePullPolicy: Always
+        securityContext:
+          privileged: true
+          procMount: Default
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
+status:
+  observedGeneration: 1
+  replicas: 1
+  updatedReplicas: 1
+  readyReplicas: 1
+  availableReplicas: 1
+  conditions:
+  - type: Available
+    status: 'True'
+    lastUpdateTime: '2019-07-07T14:57:56Z'
+    lastTransitionTime: '2019-07-07T14:57:56Z'
+    reason: MinimumReplicasAvailable
+    message: Deployment has minimum availability.
+  - type: Progressing
+    status: 'True'
+    lastUpdateTime: '2019-07-07T14:57:56Z'
+    lastTransitionTime: '2019-07-07T14:57:49Z'
+    reason: NewReplicaSetAvailable
+    message: ReplicaSet "microservices-demo-688c7f7ff6" has successfully progressed.

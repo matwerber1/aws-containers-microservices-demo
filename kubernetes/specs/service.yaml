@@ -1,0 +1,28 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: microservices-demo
+  namespace: default
+  selfLink: "/api/v1/namespaces/default/services/microservices-demo"
+  uid: 965cac5b-a0c7-11e9-ad6f-127e03a2d9dc
+  resourceVersion: '1697'
+  creationTimestamp: '2019-07-07T14:57:49Z'
+  labels:
+    k8s-app: microservices-demo
+spec:
+  ports:
+  - name: tcp-80-80-n4j9x
+    protocol: TCP
+    port: 80
+    targetPort: 80
+    nodePort: 31919
+  selector:
+    k8s-app: microservices-demo
+  clusterIP: 10.100.160.249
+  type: LoadBalancer
+  sessionAffinity: None
+  externalTrafficPolicy: Cluster
+status:
+  loadBalancer:
+    ingress:
+    - hostname: a965cac5ba0c711e9ad6f127e03a2d9d-969801692.us-east-1.elb.amazonaws.com

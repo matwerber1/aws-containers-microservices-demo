@@ -1,0 +1,28 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: microservices-demo
+  region: us-east-1
+
+vpc:
+  subnets:
+    private:
+      # Uses my Sandbox VPC
+      us-east-1b: { id: subnet-014bb42f }
+      us-east-1d: { id: subnet-d3c33e8f }
+    public:
+      us-east-1b: { id: subnet-3749b619 }
+      us-east-1d: { id: subnet-6732cf3b }
+
+nodeGroups:
+  - name: ng-1
+    labels: { role: workers }
+    instanceType: t3.medium
+    minSize: 1
+    desiredCapacity: 1
+    maxSize: 2
+    privateNetworking: true
+    ssh:
+      allow: true
+      PublicKeyName: 'MyGenericKeyPair'
